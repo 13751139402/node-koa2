@@ -1,5 +1,4 @@
 const User = require("../model/use.model");
-
 class UserController {
   async createUser(user_name, password) {
     // 插入数据
@@ -12,10 +11,12 @@ class UserController {
     user_name && Object.assign(whereOpt, { user_name });
     password && Object.assign(whereOpt, { password });
     is_admin && Object.assign(whereOpt, { is_admin });
-    User.fineOne({
+    const res = await User.findOne({
       attributes: ["id", "user_name", "password", "is_admin"],
       where: whereOpt,
     });
+
+    return res ? res.dataValues : null;
   }
 }
 
