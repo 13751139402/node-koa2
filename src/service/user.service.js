@@ -1,7 +1,21 @@
+const User = require("../model/use.model");
+
 class UserController {
   async createUser(user_name, password) {
-    // todo:写入数据库
-    return "写入数据库成功";
+    // 插入数据
+    const res = await User.create({ user_name, password });
+    return res.dataValues;
+  }
+  async getUserInfo({ id, user_name, password, is_admin }) {
+    const whereOpt = {};
+    id && Object.assign(whereOpt, { id });
+    user_name && Object.assign(whereOpt, { user_name });
+    password && Object.assign(whereOpt, { password });
+    is_admin && Object.assign(whereOpt, { is_admin });
+    User.fineOne({
+      attributes: ["id", "user_name", "password", "is_admin"],
+      where: whereOpt,
+    });
   }
 }
 
