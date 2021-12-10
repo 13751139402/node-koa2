@@ -65,11 +65,10 @@ const verifyLogin = async (ctx, next) => {
 };
 
 // 密码加密中间件
-const bcryptPassword = async (ctx, next) => {
+const cryptPassword = async (ctx, next) => {
   const { password } = ctx.request.body;
-
   const salt = bcrypt.genSaltSync(10); // 十次加盐, 生成一个盐
-  const hash = bcrypt.hashSync(password, salt); // 盐+密码+哈希 等于最终的密文
+  const hash = bcrypt.hashSync(String(password), salt); // 盐+密码+哈希 等于最终的密文
   ctx.request.body.password = hash;
   await next();
 };
@@ -77,6 +76,6 @@ const bcryptPassword = async (ctx, next) => {
 module.exports = {
   userValidator,
   verifyUser,
-  bcryptPassword,
+  cryptPassword,
   verifyLogin,
 };
