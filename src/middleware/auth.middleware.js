@@ -11,7 +11,7 @@ const {
 // 是否登陆
 const auth = async (ctx, next) => {
   // 获取token
-  const { authorization } = ctx.request.header;
+  const { authorization = "" } = ctx.request.header;
   const token = authorization.replace("Bearer ", "");
   try {
     // JWT_SECRET是密钥可以解开token中的没过期的playload数据。user中包含了payload的信息（id,user_name,is_admin）

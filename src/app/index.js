@@ -1,5 +1,8 @@
+const path = require("path");
+
 const Koa = require("koa");
 const koaBody = require("koa-body");
+const koaStatic = require("koa-static");
 
 const errHandler = require("./errHandler");
 
@@ -7,7 +10,20 @@ const router = require("../router");
 
 const app = new Koa();
 
-app.use(koaBody());
+const uploadPath = path.join(__dirname, "../upload");
+app.use(
+  koaBody({
+    multipart: true, // 开启文件上传功能
+    formidable: {
+      // 文件保留的路径,不推荐使用相对路径
+      // 在option里的相对路径，不是相对的当前文件，相对process.cwd(),这个脚步在哪执行就相对于哪里
+      // path.join(__dirname)
+      uploadDir: uploadPath,
+      keepExtensions: true, // 是否要保留文件扩展名
+    },
+  })
+);
+app.use(koaStatic(uploadPath));
 app.use(router.routes());
 // 不支持的请求方式会报501错误：没有实现
 app.use(router.allowedMethods());
