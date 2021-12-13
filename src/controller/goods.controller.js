@@ -3,7 +3,10 @@ const path = require("path");
 const {
   fileUploadError,
   unSupportedFileType,
+  publishGoodError,
+  invalidGoodsId,
 } = require("../constant/err.type");
+const { createGoods, updateGoods } = require("../service/goods.service");
 class GoodsController {
   async upload(ctx, next) {
     const { file } = ctx.request.files;
@@ -22,6 +25,39 @@ class GoodsController {
       };
     } else {
       ctx.app.emit("error", fileUploadError, ctx);
+    }
+  }
+  async create(ctx) {
+    // 直接调用servers的createGoods
+    try {
+      const { createdAt, updatedAt, ...res } = await createGoods(
+        ctx.request.body
+      );
+      ctx.body = {
+        code: 0,
+        message: "发布商品成功",
+        result: res,
+      };
+    } catch (error) {
+      return ctx.app.emit("error", publishGoodError, ctx);
+    }
+  }
+  async update(ctx) {
+    try {
+      // get参数会放在params中
+      const res = await updateGoods(ctx.params.id, ctx.request.body);
+      console.log("resresresres", res);
+      if (res) {
+        ctx.body = {
+          code: 0,
+          message: "修改商品成功",
+          result: "",
+        };
+      } else {
+        return ctx.app.emit("error", invalidGoodsId, ctx);
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 }
