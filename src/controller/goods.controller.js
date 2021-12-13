@@ -6,7 +6,12 @@ const {
   publishGoodError,
   invalidGoodsId,
 } = require("../constant/err.type");
-const { createGoods, updateGoods } = require("../service/goods.service");
+const {
+  createGoods,
+  updateGoods,
+  removeGoods,
+  restoreGoods,
+} = require("../service/goods.service");
 class GoodsController {
   async upload(ctx, next) {
     const { file } = ctx.request.files;
@@ -58,6 +63,31 @@ class GoodsController {
       }
     } catch (error) {
       console.error(error);
+    }
+  }
+  async remove(ctx) {
+    const res = await removeGoods(ctx.params.id);
+    if (res) {
+      ctx.body = {
+        code: 0,
+        message: "商品下架成功",
+        result: "",
+      };
+    } else {
+      return ctx.app.emit("error", invalidGoodsId, ctx);
+    }
+  }
+  async restore(ctx) {
+    const res = await restoreGoods(ctx.params.id);
+    console.log(res);
+    if (res) {
+      ctx.body = {
+        code: 0,
+        message: "上架商品成功",
+        result: "",
+      };
+    } else {
+      return ctx.app.emit("error", invalidGoodsId, ctx);
     }
   }
 }
