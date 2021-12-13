@@ -3,6 +3,7 @@ const path = require("path");
 const Koa = require("koa");
 const koaBody = require("koa-body");
 const koaStatic = require("koa-static");
+const parameter = require("koa-parameter");
 
 const errHandler = require("./errHandler");
 
@@ -24,6 +25,7 @@ app.use(
   })
 );
 app.use(koaStatic(uploadPath));
+app.use(parameter(app));
 app.use(router.routes());
 // 不支持的请求方式会报501错误：没有实现
 app.use(router.allowedMethods());
