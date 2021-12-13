@@ -8,6 +8,7 @@ const {
   update,
   remove,
   restore,
+  findAll,
 } = require("../controller/goods.controller");
 
 const router = new Router({ prefix: "/goods" });
@@ -28,4 +29,7 @@ router.put("/:id", auth, hadAdminePermission, validator, update);
 router.post("/:id/off", auth, hadAdminePermission, remove);
 // 下架
 router.post("/:id/on", auth, hadAdminePermission, restore);
+
+// 获取商品列表
+router.get("/", findAll);
 module.exports = router;

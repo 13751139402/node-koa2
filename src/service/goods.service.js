@@ -20,6 +20,23 @@ class GoodsService {
     const res = await Goods.restore({ where: { id } });
     return res;
   }
+  async findGoods(pageNum, pageSize) {
+    const offset = (pageNum - 1) * pageSize; // 偏移量
+    // // 1.获取总数
+    // const total = await Goods.count();
+    // // 2.获取分页数据
+    // const rows = await Goods.findAll({ offset, limit: Number(pageSize) });
+    const { count, rows } = await Goods.findAndCountAll({
+      offset,
+      limit: Number(pageSize),
+    });
+    return {
+      pageNum,
+      pageSize,
+      total: count,
+      list: rows,
+    };
+  }
 }
 
 module.exports = new GoodsService();
