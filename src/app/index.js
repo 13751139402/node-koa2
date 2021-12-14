@@ -22,6 +22,7 @@ app.use(
       uploadDir: uploadPath,
       keepExtensions: true, // 是否要保留文件扩展名
     },
+    parsedMethods: ["POST", "PUT", "PATCH", "DELETE"], //delete默认不把body数据挂载到ctx.request.body中，这里设置一下
   })
 );
 app.use(koaStatic(uploadPath));

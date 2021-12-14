@@ -6,7 +6,12 @@ const { auth } = require("../middleware/auth.middleware");
 const { validator } = require("../middleware/cart.middleware");
 
 // 控制器
-const { add, findAll, update } = require("../controller/cart.controller");
+const {
+  add,
+  findAll,
+  update,
+  remove,
+} = require("../controller/cart.controller");
 
 // 2.实例化router对象
 const router = new Router({ prefix: "/carts" });
@@ -20,6 +25,7 @@ router.post("/add", auth, validator({ goods_id: "number" }), add);
 router.get("/", auth, findAll);
 
 // 3.3 更新购物车
+// post是新增，put是整体更改，patch是补丁更改
 router.patch(
   "/:id",
   auth,
@@ -30,7 +36,8 @@ router.patch(
   update
 );
 
-// 3.3 更新购物车
-router.patch("/:id", auth);
+// 3.4 删除购物车
+router.delete("/", auth, validator({ ids: "array" }), remove);
+
 // 4.导出router对象
 module.exports = router;

@@ -55,6 +55,15 @@ class CartService {
     selected !== undefined ? (res.selected = selected) : "";
     return await res.save(); // 更新数据库
   }
+  async removeCarts(ids) {
+    return await Cart.destroy({
+      where: {
+        id: {
+          [Op.in]: ids,
+        },
+      },
+    });
+  }
 }
 
 module.exports = new CartService();
