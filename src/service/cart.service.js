@@ -46,6 +46,15 @@ class CartService {
       list: rows,
     };
   }
+  async updateCarts({ id, number, selected }) {
+    const res = await Cart.findByPk(id);
+    if (!res) {
+      return "";
+    }
+    number !== undefined ? (res.number = number) : "";
+    selected !== undefined ? (res.selected = selected) : "";
+    return await res.save(); // 更新数据库
+  }
 }
 
 module.exports = new CartService();
