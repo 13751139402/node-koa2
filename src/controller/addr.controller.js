@@ -2,6 +2,8 @@ const {
   createAddr,
   findAllAddr,
   updateAddr,
+  removeAddr,
+  setDefault,
 } = require("../service/addr.service");
 class AddrController {
   async create(ctx) {
@@ -40,6 +42,29 @@ class AddrController {
       message: "更新地址成功",
       result: res,
     };
+  }
+  async remove(ctx) {
+    const id = ctx.request.params.id;
+    const res = await removeAddr(id);
+    ctx.body = {
+      code: 0,
+      message: "删除成功",
+      result: res,
+    };
+  }
+  async setDefault(ctx) {
+    try {
+      const user_id = ctx.state.user.id;
+      const id = ctx.request.params.id;
+      const res = await setDefault(user_id, id);
+      ctx.body = {
+        code: 0,
+        message: "设置默认成功",
+        result: res,
+      };
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 
