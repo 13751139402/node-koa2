@@ -1,4 +1,8 @@
-const { createOrder, findAllOrder } = require("../service/order.service");
+const {
+  createOrder,
+  findAllOrder,
+  updateOrder,
+} = require("../service/order.service");
 
 class OrderController {
   async create(ctx) {
@@ -40,6 +44,16 @@ class OrderController {
     } catch (error) {
       console.error(error);
     }
+  }
+  async update(ctx) {
+    const id = ctx.request.params.id;
+    const { status } = ctx.request.body;
+
+    const res = await updateOrder(id, status);
+    ctx.body = {
+      code: 0,
+      message: "更新订单状态成功",
+    };
   }
 }
 
